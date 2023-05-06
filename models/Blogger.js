@@ -65,7 +65,7 @@ const BloggerSchema = new Schema({
             return formattedPhoneNumbers;
         }
     },
-    roleInCompany: {
+    roleIn: {
         type: String,
         enum: {
             values: ["Blogger", "Admin"],
