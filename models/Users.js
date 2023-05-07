@@ -1,4 +1,4 @@
-import  { Schema, model } from "mongoose";
+const  { Schema, model } = require("mongoose");
 
 const UsersSchema = new Schema({
     fristName: {
@@ -41,28 +41,18 @@ const UsersSchema = new Schema({
         lowercase: true
     },
     phoneNumber: {
-        type: [String],
+        type: String,
+        required: true,
         unique: true,
         validate: {
-            validator: value => {
-                if (!value.length) return false;
-
-                for (const phone of value) {
-                    if (!isMobilePhone(phone, 'ir-IR')) return false;
-                }
-
-                return true;
-            },
-            message: 'provide valid phoneNumber and at least one phoneNumber'
+          validator: function (v) {
+            return /^(\+98|0)?9\d{9}$/.test(v);
+          },
+          message: (props) =>
+            `${props.value} is not a valid Iranian phone number!`,
         },
-        set: value => {
-            const formattedPhoneNumbers = value.map(phone => {
-                if (phone.startsWith('0')) return `+98${phone.slice(1)}`;
-
-                return phone;
-            });
-
-            return formattedPhoneNumbers;
+        set: function (v) {
+          return `+98${v.replace(/^0/, "")}`;
         }
     },
     roleIn: {
@@ -84,4 +74,4 @@ const UsersSchema = new Schema({
 );
 
 
-export const Users =  model("Blogger", UsersSchema)
+module.exports =  Users =  model("Blogger", UsersSchema)
