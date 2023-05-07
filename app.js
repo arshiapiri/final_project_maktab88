@@ -1,39 +1,51 @@
+const createError = require('http-errors');
 const express = require('express');
+const mongoose = require("mongoose")
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
+
+// const apiRouter= require('./routes/api-route');
+// const usersRouter = require('./routes/auth-router');
+const AppError = require("./utils/app-error");
+const globalError = require("./middlewares/globalErrorHandler");
+const notFoundError = require("./middlewares/notFoundError");
+
 const app = express();
-const { join } = require('node:path');
-const { AppError } = require('./utils/app-error');
-const apiRouter = require('./routes/api-route');
-const viewRouter = require('./routes/view-route');
 
-// setup view engine:ejs
+// view engine setup
+app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
-app.set('views', join(__dirname, './views'));
 
-// sever static files
-app.use(express.static(join(__dirname, './public')));
-
+app.use(logger('dev'));
 // body parser
 app.use(express.json({ limit: '10kb' }));
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: false }));
+
+app.use(cookieParser());
+app.use(express.static(path.join(__dirname, 'public')));
+
+mongoose
+	.connect('mongodb://127.0.0.1:27017/corporate')
+	.then(() => {
+		console.log('[+] database connected');
+	})
+	.catch(err => {
+		console.error('[-] database connection > ', err);
+	});
+
+
 
 // routing
-app.use('/', viewRouter);
-app.use('/api', apiRouter);
+// app.use('/api', apiRouter);
+// app.use('/users', usersRouter);
 
-// 404 handler
-app.all('*', (req, res, next) => {
-	next(new AppError(404, `${req.method} ${req.originalUrl} not found!`));
-});
+
+// catch 404 and forward to error handler
+app.all("*", notFoundError);
+
 
 // global error handler
-app.use((err, req, res, next) => {
-	const {
-		statusCode = 500,
-		status = 'error',
-		message = 'something went wrong, not fault :)'
-	} = err;
+app.use(globalError);
 
-	res.status(statusCode).json({ status, message });
-});
-
-app.listen(8000, '127.0.0.1', () => console.log('Listening on :8000 ...'));
+module.exports = app;
