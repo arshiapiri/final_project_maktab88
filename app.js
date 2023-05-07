@@ -5,8 +5,8 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 
-// const apiRouter= require('./routes/api-route');
-// const usersRouter = require('./routes/auth-router');
+const apiRouter= require('./routes/api-route');
+const usersRouter = require('./routes/auth-router');
 const AppError = require("./utils/app-error");
 const globalError = require("./middlewares/globalErrorHandler");
 const notFoundError = require("./middlewares/notFoundError");
@@ -37,8 +37,8 @@ mongoose
 
 
 // routing
-// app.use('/api', apiRouter);
-// app.use('/users', usersRouter);
+app.use('/api', apiRouter);
+app.use('/users', usersRouter);
 
 
 // catch 404 and forward to error handler
