@@ -1,6 +1,6 @@
 import  { Schema, model } from "mongoose";
 
-const BloggerSchema = new Schema({
+const UsersSchema = new Schema({
     fristName: {
         type: String,
         required: [true, "fristName is required"],
@@ -84,4 +84,4 @@ const BloggerSchema = new Schema({
 );
 
 
-export const Blogger =  model("Blogger", BloggerSchema)
+export const Users =  model("Blogger", UsersSchema)
