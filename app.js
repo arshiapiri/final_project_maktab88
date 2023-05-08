@@ -1,13 +1,13 @@
-const createError = require('http-errors');
 const express = require('express');
 const mongoose = require("mongoose")
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+const session = require("express-session")
 
-const apiRouter= require('./routes/api-route');
 const usersRouter = require('./routes/auth-router');
-const AppError = require("./utils/app-error");
+const viewRouter = require("./routes/view-route")
+
 const globalError = require("./middlewares/globalErrorHandler");
 const notFoundError = require("./middlewares/notFoundError");
 
@@ -35,9 +35,18 @@ mongoose
 	});
 
 
+app.use(
+	session({
+		secret: "my-secret-key",
+		resave: false,
+		cookie: { maxAge: 24 * 60 * 60 * 1000 },
+		saveUninitialized: false,
+	})
+);
+
 
 // routing
-app.use('/api', apiRouter);
+app.use('/', viewRouter);
 app.use('/users', usersRouter);
 
 
