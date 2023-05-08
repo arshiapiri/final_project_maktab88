@@ -40,6 +40,7 @@ module.exports.signup = async (req, res, next) => {
         await newUser.save()
         res.status(201).send(newUser)
     } catch (error) {
+        console.log(error);
         next(new AppError(400, "Sign-up failed. Please check your information and try again."));
     }
 }
