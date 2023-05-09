@@ -6,7 +6,7 @@ const userRequestForSignUp = require("../validators/userReq")
 
 module.exports.signup = async (req, res, next) => {
     try {
-        const  userRequestForSignUp = req.body;
+        const userRequestForSignUp = req.body;
         const { error } = validateSignUp.validateUser(userRequestForSignUp);
         if (!!error) {
             return next(
@@ -46,7 +46,7 @@ module.exports.login = async (req, res, next) => {
     try {
         const requestBody = { username = null, password = null } = req.body;
         const { error } = validateLogIn.validateUser(requestBody)
-        if(!!error) {
+        if (!!error) {
             return next(
                 new AppError(
                     400,
@@ -75,7 +75,24 @@ module.exports.login = async (req, res, next) => {
     }
 }
 
-module.exports.logOut = async(req,res,next) => {
+// module.exports.updateUser = (req, res, next) => {
+//     const {
+//         firstname,
+//         lastname,
+//         username,
+//         gender,
+//         phoneNumber,
+//         role 
+//     } = req.body;
+// }
+
+module.exports.deleteUser = async (req,res,next) => {
+    await Users.findByIdAndRemove(req.session.user._id);
+    req.session.destroy();
+    res.status(204).end()
+}
+
+module.exports.logOut = async (req, res, next) => {
     req.session.destroy();
     res.status(200).end();
 }

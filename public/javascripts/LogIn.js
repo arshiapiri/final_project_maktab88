@@ -25,7 +25,7 @@ $(() => {
           } else {
             swal({
               title: "Success!",
-              text: "Your data has been saved.",
+              text: "Login successfully!",
               icon: "success",
             });
             setTimeout(() => {

@@ -33,3 +33,39 @@ module.exports.renderUserProfile = async (req, res, next) => {
 }
 
 
+module.exports.uploadAvatar = (req, res, next) => {
+    const uploadUserAvatar = userAvatarUpload.single("avatar");
+  
+    uploadUserAvatar(req, res, async (err) => {
+      if (err) {
+        if (err.message) return res.status(400).send(err.message);
+        return res.status(500).send("server error!");
+      }
+  
+      if (!req.file) return res.status(400).send("File not send!");
+  
+      try {
+        // delete old avatar
+        if (req.session.user.avatar)
+          await fs.unlink(
+            path.join(__dirname, "../public", req.session.user.avatar)
+          );
+  
+        const userss = await user.findByIdAndUpdate(
+          req.session.user._id,
+          {
+            avatar: "/images/userAvatars/" + req.file.filename,
+          },
+          { new: true }
+        );
+        console.log(req.session.user.avatar);
+        req.session.user.avatar = userss.avatar;
+  
+        // return res.json(user);
+        res.redirect("/profile");
+      } catch (err) {
+        return next(createError(500, "Server Error!"));
+      }
+    });
+  };
+

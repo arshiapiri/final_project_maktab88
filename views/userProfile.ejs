@@ -16,6 +16,7 @@
     <!-- Font Awesome CSS -->
     <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css'>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 </head>
 
@@ -30,11 +31,11 @@
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Your Blogs <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">About Us</a>
+                    <a class="nav-link" href="#">Comments</a>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
@@ -49,7 +50,7 @@
                     </div>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link disabled" href="#">LogOut</a>
+                    <a class="nav-link" id="logout-btn" href="">LogOut</a>
                 </li>
             </ul>
             <form class="form-inline my-2 my-lg-0">
@@ -62,16 +63,18 @@
     <div class="student-profile py-4">
         <div class="container">
             <div class="row">
-                <div class="col-lg-4">
+                <div class="col-lg-4 mb-2">
                     <div class="card shadow-sm">
                         <div class="card-header bg-transparent text-center">
-                            <img class="profile_img" src="https://source.unsplash.com/600x300/?student"
-                                alt="student dp">
-                            <h3>Welcome In Your Profile</h3>
+                            <div class="profile_img">
+                            </div>
+                            <h3>Welcome <%= user.fristName %>
+                                    <%= user.lastName %>
+                            </h3>
                         </div>
                         <div class="card-body">
-                            <p class="mb-0"><strong class="pr-1"> UserName:</strong></p>
-                            <p class="mb-0"><strong class="pr-1">Role:</strong></p>
+                            <p class="mb-0"><strong class="pr-1"> UserName: <%= user.username %> </strong></p>
+                            <p class="mb-0"><strong class="pr-1">Role: <%= user.roleIn %></strong></p>
                         </div>
                     </div>
                 </div>
@@ -85,24 +88,34 @@
                                 <tr>
                                     <th width="30%">fristName</th>
                                     <td width="2%">:</td>
-                                    <td></td>
+                                    <td>
+                                        <%= user.fristName %>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <th width="30%">lastName</th>
                                     <td width="2%">:</td>
-                                    <td></td>
+                                    <td>
+                                        <%= user.lastName %>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <th width="30%">Gender</th>
                                     <td width="2%">:</td>
-                                    <td></td>
+                                    <td>
+                                        <%= user.gender %>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <th width="30%">phoneNumber</th>
                                     <td width="2%">:</td>
-                                    <td></td>
+                                    <td>
+                                        <%= user.phoneNumber %>
+                                    </td>
                                 </tr>
                             </table>
+                            <button class="btn btn-outline-success my-2 my-sm-0" type="submit" id="edit-btn">Edit</button>
+                            <button class="btn btn-outline-warning my-2 my-sm-0" type="submit" id="delete-btn">delete</button>
                         </div>
                     </div>
                 </div>
@@ -119,5 +132,5 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"
     integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
     crossorigin="anonymous"></script>
-
+    <script src="/javascripts/LogOut.js"></script>
 </html>
