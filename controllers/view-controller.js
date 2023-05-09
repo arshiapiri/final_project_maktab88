@@ -19,7 +19,7 @@ module.exports.Signup = (req, res, next) => {
 
 module.exports.renderUserProfile = async (req, res, next) => {
     if (!req.session.user) return res.redirect("/login");
-    const {
+    const user = {
         fristName,
         lastName,
         username,
@@ -28,15 +28,7 @@ module.exports.renderUserProfile = async (req, res, next) => {
         phoneNumber,
         roleIn
     } = await Users.findById(req.session.user._id);
-    res.render(join(__dirname, "../views/userProfile.ejs"), {
-        fristName,
-        lastName,
-        username,
-        password,
-        gender,
-        phoneNumber,
-        roleIn
-    }
+    res.render(join(__dirname, "../views/userProfile.ejs"), { user }
     )
 }
 
