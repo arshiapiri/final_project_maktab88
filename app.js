@@ -33,17 +33,13 @@ mongoose
 	.catch(err => {
 		console.error('[-] database connection > ', err);
 	});
-
-
-app.use(
-	session({
-		secret: "my-secret-key",
-		resave: false,
-		cookie: { maxAge: 24 * 60 * 60 * 1000 },
-		saveUninitialized: false,
-	})
-);
-
+const oneDay = 1000 * 60 * 60 * 24;
+app.use(session({
+	secret: "mySecrectKeyForAuthProject",
+	saveUninitialized: true,
+	cookie: { maxAge: oneDay },
+	resave: false
+}));
 
 // routing
 app.use('/', viewRouter);
