@@ -39,7 +39,7 @@ module.exports.signup = async (req, res, next) => {
         res.status(201).send(newUser)
     } catch (error) {
         console.log(error);
-        next(new AppError(400, "Sign-up failed. Please check your information and try again."));
+        next(new AppError(500, "Sign-up failed. Please check your information and try again."));
     }
 }
 module.exports.login = async (req, res, next) => {
@@ -75,18 +75,9 @@ module.exports.login = async (req, res, next) => {
     }
 }
 
-// module.exports.updateUser = (req, res, next) => {
-//     const {
-//         firstname,
-//         lastname,
-//         username,
-//         gender,
-//         phoneNumber,
-//         role 
-//     } = req.body;
-// }
 
-module.exports.deleteUser = async (req,res,next) => {
+
+module.exports.deleteUser = async (req, res, next) => {
     await Users.findByIdAndRemove(req.session.user._id);
     req.session.destroy();
     res.status(204).end()

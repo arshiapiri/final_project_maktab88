@@ -32,6 +32,35 @@ module.exports.renderUserProfile = async (req, res, next) => {
     )
 }
 
+module.exports.updateUser = async (req, res, next) => {
+  try {
+      const fields = {
+          fristName,
+          lastName,
+          gender,
+          username
+      } = req.body;
+
+      let user = await Users.findOne({
+          username: fields.username,
+      });
+      if (!user) {
+          return next(new AppError(400, 'username not found'));
+      }
+
+      req.session.user = { _id: user._id };
+      const updating = await Users.findByIdAndUpdate(
+          req.session.user._id,
+          fields,
+          {
+              new: true,
+          }
+      );
+      res.render("profile", { user: req.session.user });
+  } catch (error) {
+      
+  }
+};
 
 module.exports.uploadAvatar = (req, res, next) => {
     const uploadUserAvatar = userAvatarUpload.single("avatar");

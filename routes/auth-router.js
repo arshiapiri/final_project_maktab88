@@ -10,8 +10,6 @@ router.post("/signup", signupController.signup);
 router.post("/login", loginController.login);
 router.get("/logout", logoutController.logOut);
 
-// router.put("/:userId", updateController.updateUser)
-
 router.get("/deleteAcc" , deleteController.deleteUser)
 
 
