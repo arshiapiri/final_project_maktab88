@@ -2,6 +2,7 @@ const Users = require("../models/Users");
 const AppError = require('../utils/app-error');
 const validateSignUp = require("../validators/checkForSignUp");
 const validateLogIn = require("../validators/checForLogIn");
+const validateUpdate = require("../validators/checkForUpdate");
 const userRequestForSignUp = require("../validators/userReq")
 
 module.exports.signup = async (req, res, next) => {
@@ -38,7 +39,6 @@ module.exports.signup = async (req, res, next) => {
         await newUser.save()
         res.status(201).send(newUser)
     } catch (error) {
-        console.log(error);
         next(new AppError(500, "Sign-up failed. Please check your information and try again."));
     }
 }
@@ -75,6 +75,47 @@ module.exports.login = async (req, res, next) => {
     }
 }
 
+module.exports.updateUser = async (req, res, next) => {
+    try {
+        const fields = {
+            fristName,
+            lastName,
+            gender,
+            username
+        } = req.body;
+
+        const { error } = validateUpdate.validateUser(fields)
+        console.log(error);
+
+        if (!!error) {
+            return next(
+                new AppError(
+                    400,
+                    error.details[0].message
+                )
+            )
+        }
+        let user = await Users.findOne({
+            username: fields.username,
+        });
+        if (!user) {
+            return next(new AppError(400, 'username not found, you cant change your userName'));
+        }
+
+        req.session.user = { _id: user._id };
+    console.log(req.session.user);
+        const updating = await Users.findByIdAndUpdate(
+            req.session.user._id,
+            fields,
+            {
+                new: true,
+            }
+        );
+        res.send({ user });
+    } catch (error) {
+        console.log(error);
+    }
+};
 
 
 module.exports.deleteUser = async (req, res, next) => {
@@ -84,6 +125,7 @@ module.exports.deleteUser = async (req, res, next) => {
 }
 
 module.exports.logOut = async (req, res, next) => {
+    console.log(req.session);
     req.session.destroy();
-    res.status(200).end();
+    res.status(200).end()
 }
