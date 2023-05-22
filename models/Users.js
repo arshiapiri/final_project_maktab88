@@ -65,7 +65,7 @@ const UsersSchema = new Schema({
         default: "Blogger",
         trim: true
     },
-    avatarFileName: {
+    avatar: {
         type: String,
         required: true,
         default: function () {
