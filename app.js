@@ -6,7 +6,8 @@ const logger = require('morgan');
 const session = require("express-session")
 
 const usersRouter = require('./routes/auth-router');
-const viewRouter = require("./routes/view-route")
+const viewRouter = require("./routes/view-route");
+const article = require("./routes/article-route")
 
 const globalError = require("./middlewares/globalErrorHandler");
 const notFoundError = require("./middlewares/notFoundError");
@@ -44,6 +45,7 @@ app.use(session({
 // routing
 app.use('/', viewRouter);
 app.use('/users', usersRouter);
+app.use("/article", article)
 
 
 // catch 404 and forward to error handler

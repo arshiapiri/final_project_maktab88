@@ -1,5 +1,8 @@
 const { join } = require('node:path');
 const Users = require("../models/Users");
+const Articles = require("../models/Article");
+const upload = require("../utils/multer");
+const fs = require("fs/promises");
 
 module.exports.login = (req, res, next) => {
     if (req.session && req.session.user) {
@@ -31,69 +34,80 @@ module.exports.renderUserProfile = async (req, res, next) => {
     res.render(join(__dirname, "../views/userProfile.ejs"), { user }
     )
 }
+module.exports.renderArticle = async (req, res, next) => {
 
-module.exports.updateUser = async (req, res, next) => {
-  try {
-      const fields = {
-          fristName,
-          lastName,
-          gender,
-          username
-      } = req.body;
+  const readArticle = await Articles.find({});
 
-      let user = await Users.findOne({
-          username: fields.username,
-      });
-      if (!user) {
-          return next(new AppError(400, 'username not found'));
-      }
-
-      req.session.user = { _id: user._id };
-      const updating = await Users.findByIdAndUpdate(
-          req.session.user._id,
-          fields,
-          {
-              new: true,
-          }
-      );
-      res.render("profile", { user: req.session.user });
-  } catch (error) {
-      
-  }
-};
+  res.render(join(__dirname, "../views/blogs.ejs"));
+}
 
 module.exports.uploadAvatar = (req, res, next) => {
-    const uploadUserAvatar = userAvatarUpload.single("avatar");
+  const uploadUserAvatar = upload.upload.single("avatar");
+  if (!req.session.user) return res.redirect("/login");
+  uploadUserAvatar(req, res, async (err) => {
+    if (err) {
+      if (err.message) return res.status(400).send(err.message);
+      return res.status(500).send("server error!");
+    }
+
+    if (!req.file) return res.status(400).send("File not send!");
+
+    try {
+      if (req.session.user.avatar) {
+        await fs.unlink(
+          join(__dirname, "../public", req.session.user.avatar)
+        );
+      }
+
+      const userss = await Users.findByIdAndUpdate(
+        req.session.user._id,
+        {
+          avatar: "/images/userAvatars/" + req.file.filename,
+        },
+        { new: true }
+      );
+      req.session.user.avatar = userss.avatar;
+
+      // return res.json(user);
+      res.redirect("/profile");
+    } catch (err) {
+      console.log(err);
+    }
+  });
+  };
+
+  module.exports.uploadThumbnail = (req, res, next) => {
+    const uploadArticleThumbnail = articleThumbnailUpload.single("thumbnail");
   
-    uploadUserAvatar(req, res, async (err) => {
+    uploadArticleThumbnail(req, res, async (err) => {
       if (err) {
         if (err.message) return res.status(400).send(err.message);
-        return res.status(500).send("server error!");
+        return res.status(500).send("Server error!");
       }
   
-      if (!req.file) return res.status(400).send("File not send!");
+      if (!req.file) return res.status(400).send("File not sent!");
   
       try {
-        // delete old avatar
-        if (req.session.user.avatar)
+        // Delete old thumbnail
+        if (req.session.article.thumbnail) {
           await fs.unlink(
-            path.join(__dirname, "../public", req.session.user.avatar)
+            path.join(__dirname, "../public", req.session.article.thumbnail)
           );
+        }
   
-        const userss = await user.findByIdAndUpdate(
-          req.session.user._id,
+        const updatedArticle = await Article.findByIdAndUpdate(
+          req.session.article._id,
           {
-            avatar: "/images/userAvatars/" + req.file.filename,
+            thumbnail: "/images/articleThumbnails/" + req.file.filename,
           },
           { new: true }
         );
-        console.log(req.session.user.avatar);
-        req.session.user.avatar = userss.avatar;
   
-        // return res.json(user);
-        res.redirect("/profile");
+        req.session.article.thumbnail = updatedArticle.thumbnail;
+  
+        res.redirect("/article");
       } catch (err) {
-        return next(createError(500, "Server Error!"));
+        return next(createError(500, "Server error!"));
       }
     });
   };
