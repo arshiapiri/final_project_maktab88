@@ -4,7 +4,7 @@ $(() => {
             method: "get"
         })
             .then(async response => {
-                swal({
+                Swal.fire({
                     title: "Success!",
                     text: "Logout successfully!",
                     icon: "success",
@@ -13,7 +13,8 @@ $(() => {
                     window.location.href = `/login`;
                 }, 2000)
             }).catch((error) => {
-                swal({
+                console.log(error);
+                Swal.fire({
                     title: "Error!",
                     text: "Something went wrong!!!",
                     icon: "error",
@@ -25,7 +26,7 @@ $(() => {
         await fetch("users/deleteAcc", {
             method: "get"
         }).then(response => {
-            swal({
+            Swal.fire({
                 title: "Success!",
                 text: "Delete successfully!",
                 icon: "success",
@@ -34,7 +35,7 @@ $(() => {
                 window.location.href = `/signup`;
             }, 2000)
         }).catch((error) => {
-            swal({
+            Swal.fire({
                 title: "Error!",
                 text: "Something went wrong!!!",
                 icon: "error",
