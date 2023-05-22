@@ -1,17 +1,14 @@
 const multer = require("multer");
 
 const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-      cb(null, "public/images");
-    },
-    filename: function (req, file, cb) {
-      if (
-        file.originalname === "female.png" ||
-        file.originalname === "male.png"
-      )
-        cb(new Error("Bad file name!"), null);
-      cb(null, Date.now() + "-" + file.originalname);
-    },
+  destination: function (req, file, cb) {
+    cb(null, "public/images/userAvatars");
+  },
+  filename: function (req, file, cb) {
+    if (file.originalname === "male.png")
+      cb(new Error("Bad file name!"), null);
+    cb(null, Date.now() + "-" + file.originalname);
+  },
   });
   
   module.exports.upload = multer({
@@ -28,7 +25,7 @@ const storage = multer.diskStorage({
       }
     },
     limits: {
-      files: 1,
+      files: 10,
       fileSize: 1 * 1024 * 1024,
     },
   });

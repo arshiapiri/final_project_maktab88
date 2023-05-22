@@ -8,6 +8,7 @@ const deleteController = require("../controllers/auth-controller")
 
 router.post("/signup", signupController.signup);
 router.post("/login", loginController.login);
+router.post("/updateUser", updateController.updateUser);
 router.get("/logout", logoutController.logOut);
 
 router.get("/deleteAcc" , deleteController.deleteUser)
