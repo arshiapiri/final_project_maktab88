@@ -77,7 +77,7 @@ module.exports.uploadAvatar = (req, res, next) => {
   };
 
   module.exports.uploadThumbnail = (req, res, next) => {
-    const uploadArticleThumbnail = articleThumbnailUpload.single("thumbnail");
+    const uploadArticleThumbnail = upload.articleTumbnailUpload.single("thumbnail");
   
     uploadArticleThumbnail(req, res, async (err) => {
       if (err) {

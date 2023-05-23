@@ -19,14 +19,13 @@ module.exports.create = async (req, res, next) => {
       content: req.body.content,
       images: req.body.images,
       author: req.body.author,
-      thumbnail: req.body.thumbnail
+      thumbnail: "/images/thumbnailPic/" + req.file.filename,
     });
-
 
     const creatArticle = await newArticle.save();
     req.session.Articles = creatArticle;
 
-    res.send("okk")
+    
   } catch (error) {
     console.log(error.message);
   }
