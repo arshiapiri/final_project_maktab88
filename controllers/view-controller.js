@@ -34,11 +34,19 @@ module.exports.renderUserProfile = async (req, res, next) => {
     res.render(join(__dirname, "../views/userProfile.ejs"), { user }
     )
 }
+
 module.exports.renderArticle = async (req, res, next) => {
 
   const readArticle = await Articles.find({});
 
   res.render(join(__dirname, "../views/blogs.ejs"));
+}
+
+module.exports.getId = async (req, res, next) => {
+  
+    const readArticleById = await Articles.findById(req.params.articleId);
+    
+    res.render(join(__dirname, '../views/blogs.ejs') , { readArticleById });
 }
 
 module.exports.uploadAvatar = (req, res, next) => {
