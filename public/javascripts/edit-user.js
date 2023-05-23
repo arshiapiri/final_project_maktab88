@@ -39,14 +39,13 @@ $(() => {
           const parsedError = JSON.parse(errorMessage);
           const errorText = parsedError.message;
   
-          // نمایش خطا با استفاده از Swal.fire
           Swal.fire({
             icon: 'error',
             title: 'Error',
             text: errorText
           });
   
-          hasErrors = true; // وجود خطا را ثبت کنید
+          hasErrors = true; 
         }
   
         if (!hasErrors) {
