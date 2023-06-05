@@ -1,7 +1,7 @@
 body {
-    background: #67B26F;  /* fallback for old browsers */
-    background: -webkit-linear-gradient(to right, #4ca2cd, #67B26F);  /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to right, #4ca2cd, #67B26F); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background-image: url("https://wallpaper-house.com/data/out/9/wallpaper2you_316842.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
     padding: 0;
     margin: 0;
     font-family: 'Lato', sans-serif;
@@ -34,4 +34,9 @@ body {
     font-size: 14px;
     padding: 5px 10px;
     color: #000;
+}
+
+
+*, *:after, *:before {
+    box-sizing: border-box;
 }

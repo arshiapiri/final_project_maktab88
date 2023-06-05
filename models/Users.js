@@ -85,6 +85,18 @@ const UsersSchema = new Schema({
     }
 );
 
+UsersSchema.virtual("articles", {
+  ref: "Articles",
+  localField: "_id",
+  foreignField: "author",
+});
+
+UsersSchema.virtual("comments", {
+  ref: "Comment",
+  localField: "_id",
+  foreignField: "user",
+});
+
 UsersSchema.pre("save", async function (next) {
     if (!this.isModified("password")) return next();
   

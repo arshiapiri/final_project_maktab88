@@ -16,7 +16,7 @@
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="http://localhost:3000/profile">Profile User</a>
+        <a class="navbar-brand" href="http://localhost:3000/profile"><i class="fa fa-user" aria-hidden="true"></i></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -25,7 +25,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="http://localhost:3000/Article" id="getArticle">Your Blogs <span
+                    <a class="nav-link" href="http://localhost:3000/Article" id="getArticle">Explore <span
                         class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
@@ -47,27 +47,26 @@
                     <a class="nav-link" id="logout-btn" href="">LogOut</a>
                 </li>
             </ul>
-            <form class="form-inline my-2 my-lg-0">
-                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-            </form>
+            <div class="text-center">
+                <a href="http://localhost:3000/createArticle" class="btn btn-outline-danger btn-lg" id="createNewArticle">
+                  New Post
+                </a>
+              </div>
         </div>
     </nav>
-    <div class="col-md-4 col-sm-6 col-12">
+    <div class="col-12 mt-5">
       <div class="row justify-content-center">
         <div class="card shadow p-3">
           <img src="<%= article.thumbnail %>" class="card-img-top rounded" />
           <div class="card-body px-0">
             <h5 class="card-title"><%= article.title %></h5>
             <p class="card-text">
-              <p>Description: <%= article.description %></p>
               <p>Content: <%= article.content %></p>
-              <p>Content: <%= article.content %></p>
-              <p>Author <%= article.author %></p>
+              <p>Author: <%= article.author %></p>
               <p>CreatedAt: <%= article.createdAt %></p>
             </p>
             <div class="d-flex">
-              <a  type="button" class="btn btn-danger" id="removeArticleBtn">
+              <a href="/article/delete/<%= article._id %>" type="button" class="btn btn-danger" id="removeArticleBtn">
                   Remove
               </a>
               <button type="button" class="btn btn-warning" id="editArticleBtn">
@@ -78,6 +77,7 @@
         </div>
       </div>
     </div>
+    
       <!-- Add the link to the Bootstrap JS file -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>

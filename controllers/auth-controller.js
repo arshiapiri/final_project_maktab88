@@ -3,7 +3,7 @@ const AppError = require('../utils/app-error');
 const validateSignUp = require("../validators/checkForSignUp");
 const validateLogIn = require("../validators/checForLogIn");
 const validateUpdate = require("../validators/checkForUpdate");
-const userRequestForSignUp = require("../validators/userReq")
+const userRequestForSignUp = require("../utils/userReq")
 
 module.exports.signup = async (req, res, next) => {
     try {

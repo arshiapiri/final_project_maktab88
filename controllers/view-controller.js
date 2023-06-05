@@ -37,9 +37,13 @@ module.exports.renderUserProfile = async (req, res, next) => {
 
 module.exports.renderArticle = async (req, res, next) => {
 
-  const readArticle = await Articles.find({});
+   await Articles.find({});
 
   res.render(join(__dirname, "../views/blogs.ejs"));
+}
+
+module.exports.renderCreateArticle = async (req, res, next) => {
+  res.render(join(__dirname, "../views/createPost.ejs"));
 }
 
 module.exports.getId = async (req, res, next) => {
@@ -119,4 +123,3 @@ module.exports.uploadAvatar = (req, res, next) => {
       }
     });
   };
-

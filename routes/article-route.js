@@ -8,6 +8,7 @@ router.get("/getAll" , article.getAll);
 router.post("/create" ,Upload.articleTumbnailUpload.single("thumbnail"), article.create);
 router.get("/:articleId", article.getId);
 
-router.delete("/:id", article.delete);
+
+router.get("/delete/:articleId", article.delete);
 
 module.exports = router

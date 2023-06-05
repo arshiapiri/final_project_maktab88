@@ -14,4 +14,8 @@ router.get("/logout", logoutController.logOut);
 router.get("/deleteAcc" , deleteController.deleteUser)
 
 
+
+
+
+
 module.exports = router;
