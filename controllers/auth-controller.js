@@ -113,7 +113,7 @@ module.exports.updateUser = async (req, res, next) => {
         );
         res.send({ user });
     } catch (error) {
-        console.log(error);
+        next(new AppError(500, "An error occurred."));
     }
 };
 
