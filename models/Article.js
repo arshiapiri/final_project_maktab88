@@ -1,5 +1,4 @@
 const { Schema, model , Types } = require("mongoose");
-const mongoose = require("mongoose");
 
 const ArticlesSchema = new Schema({
 	author: {
@@ -21,7 +20,13 @@ const ArticlesSchema = new Schema({
       },
       images: {
         type: [String]
-      }
+      },
+      comments: [
+        {
+          type: Schema.Types.ObjectId,
+          ref: "Comment", // Referencing the Comment model
+        },
+      ]
     },
     { timestamps: true }
 )

@@ -1,5 +1,4 @@
 const { Schema, model , Types } = require("mongoose");
-import mongoose from "mongoose";
 
 
 const commentSchema = new Schema({
@@ -9,11 +8,11 @@ const commentSchema = new Schema({
 		required: true
 	},
     article: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: "Articles",
         required: true,
       },
-    content: {
+      commentForArticle: {
         type: String,
         required: true,
         minlength: 3,

@@ -11,8 +11,8 @@ module.exports.getAllUserComments =  async (req, res, next) => {
   }
 
 module.exports.createComment = async (req, res, next) => {
-    const commentBody = { content = null } = req.body;
-    const articleId = req.params.articleId
+    const commentBody = { commentForArticle = null , articleId = null ,
+     } = req.body;
     const article = await Articles.findById(articleId);
 
     if (!article) {
@@ -28,8 +28,8 @@ module.exports.createComment = async (req, res, next) => {
 
       const comment = new Comment({
         article: articleId,
-        content,
-        user: userId,
+        commentForArticle,
+        author: userId,
       });
 
       await Articles.findByIdAndUpdate(articleId, {
