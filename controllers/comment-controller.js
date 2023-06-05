@@ -10,6 +10,15 @@ module.exports.getAllUserComments =  async (req, res, next) => {
     res.send(comments);
   }
 
+ module.exports.getCommentById = async(req,res,next) => {
+  try {
+    const filteredComment = await Comment.findOne(req.params.articleId ,{__v:0,updatedAt:0});
+    res.send(filteredComment);
+  } catch (error) {
+    console.log(error);
+  }
+ }
+
 module.exports.createComment = async (req, res, next) => {
     const commentBody = { commentForArticle = null , articleId = null ,
      } = req.body;
@@ -41,3 +50,4 @@ module.exports.createComment = async (req, res, next) => {
       res.status(201).send(createComment);
 }
 
+module.exports.
