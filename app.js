@@ -8,7 +8,7 @@ const session = require("express-session")
 const usersRouter = require('./routes/auth-router');
 const viewRouter = require("./routes/view-route");
 const article = require("./routes/article-route")
-const comment = require("./routes/comment")
+const comment = require("./routes/comment-router")
 
 const globalError = require("./middlewares/globalErrorHandler");
 const notFoundError = require("./middlewares/notFoundError");

@@ -1,9 +1,9 @@
 const Articles = require("../models/Article");
 const AppError = require('../utils/app-error');
 const { join } = require('node:path');
-const ArticleForCreate = require("../validators/checkForCreateArticle")
+const ArticleForCreate = require("../validators/checkForCreateArticle");
 
-const resizeArticleThumbnail = require('../utils/resizeImage/resizeArticleThumbnail');
+// const resizeArticleThumbnail = require('../utils/resizeImage/resizeArticleThumbnail');
 // const resizeArticleImages = require('../utils/resizeImage/resizeArticleImage');
 
 
@@ -48,7 +48,7 @@ module.exports.create = async (req, res, next) => {
       thumbnail: "/images/articles/thumbnailPic/" + req.file.filename,
     });
 
-    if (!req.session.user) return res.redirect("/users/login");
+    if (!req.session.user) return res.redirect("/login");
     // const articleImages = await resizeArticleImages.resizeArticleImages(article._id, req.file);
   
      await newArticle.save();
