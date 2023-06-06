@@ -2,14 +2,11 @@ const AppError = require('../utils/app-error');
 const Articles = require("../models/Article");
 const Comment = require("../models/comment");
 
-const mongoose = require("mongoose");
-
 
 
 module.exports.getAllUserComments = async (req, res, next) => {
   try {
     const userId = req.session.user._id;
-    console.log(userId);
     let comments = await Comment.find({ author: userId });
     res.send(comments);
   } catch (error) {
@@ -80,5 +77,15 @@ try {
 } catch (error) {
   next(new AppError(500, "An error occurred."));
 }
+}
+
+module.exports.deleteComment = async(req, res, next) => {
+  try {
+    const comment = req.params.commentId;
+    await Articles.findByIdAndDelete(comment)
+    res.status(200).send("your comment deleted."); 
+  } catch (error) {
+    console.log(error);
+  }
 }
 
