@@ -2,6 +2,9 @@ const AppError = require('../utils/app-error');
 const Articles = require("../models/Article");
 const Comment = require("../models/comment");
 
+const updateComment = require("../validators/updateComment")
+const createCommentValidation = require("../validators/createComment")
+
 
 
 module.exports.getAllUserComments = async (req, res, next) => {
@@ -16,7 +19,7 @@ module.exports.getAllUserComments = async (req, res, next) => {
 
 module.exports.getCommentById = async (req, res, next) => {
   try {
-    const filteredComment = await Comment.findOne({ _id : req.params.commentId},{__v:0,updatedAt:0});
+    const filteredComment = await Comment.findOne({ _id: req.params.commentId }, { __v: 0, updatedAt: 0 });
     res.status(200).send(filteredComment);
   } catch (error) {
     console.log(error);
@@ -29,6 +32,18 @@ module.exports.createComment = async (req, res, next) => {
     const commentBody = {
       commentForArticle = null, articleId = null,
     } = req.body;
+
+    const { error } = createCommentValidation.validateUser(commentBody)
+
+    if (!!error) {
+      return next(
+        new AppError(
+          400,
+          error.details[0].message
+        )
+      )
+    }
+
     const article = await Articles.findById(articleId);
 
     if (!article) {
@@ -61,29 +76,40 @@ module.exports.createComment = async (req, res, next) => {
 }
 
 module.exports.updateComment = async (req, res, next) => {
-try {
-  const commentBody = {
-    commentForArticle = null,
-  } = req.body;
+  try {
+    const commentBody = {
+      commentForArticle = null,
+    } = req.body;
 
-  const comment = await Comment.findByIdAndUpdate(
-    {
-      _id : req.params.commentId,
-    },
-    { $set: { commentForArticle } },
-    { new: true }
-  ).select("-__v");
-  res.status(200).send(comment);
-} catch (error) {
-  next(new AppError(500, "An error occurred."));
-}
+    const { error } = updateComment.validateUser(commentBody)
+
+    if (!!error) {
+      return next(
+        new AppError(
+          400,
+          error.details[0].message
+        )
+      )
+    }
+
+    const comment = await Comment.findByIdAndUpdate(
+      {
+        _id: req.params.commentId,
+      },
+      { $set: { commentForArticle } },
+      { new: true }
+    ).select("-__v");
+    res.status(200).send(comment);
+  } catch (error) {
+    next(new AppError(500, "An error occurred."));
+  }
 }
 
-module.exports.deleteComment = async(req, res, next) => {
+module.exports.deleteComment = async (req, res, next) => {
   try {
     const comment = req.params.commentId;
     await Articles.findByIdAndDelete(comment)
-    res.status(200).send("your comment deleted."); 
+    res.status(200).send("your comment deleted.");
   } catch (error) {
     console.log(error);
   }
