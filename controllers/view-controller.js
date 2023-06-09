@@ -36,18 +36,19 @@ module.exports.renderUserProfile = async (req, res, next) => {
 }
 
 module.exports.renderArticle = async (req, res, next) => {
-
+  if (!req.session.user) return res.redirect("/login");
    await Articles.find({});
 
   res.render(join(__dirname, "../views/blogs.ejs"));
 }
 
 module.exports.renderCreateArticle = async (req, res, next) => {
+  if (!req.session.user) return res.redirect("/login");
   res.render(join(__dirname, "../views/createPost.ejs"));
 }
 
 module.exports.getId = async (req, res, next) => {
-  
+  if (!req.session.user) return res.redirect("/login");
     const readArticleById = await Articles.findById(req.params.articleId);
     
     res.render(join(__dirname, '../views/blogs.ejs') , { readArticleById });
@@ -83,12 +84,13 @@ module.exports.uploadAvatar = (req, res, next) => {
       // return res.json(user);
       res.redirect("/profile");
     } catch (err) {
-      console.log(err);
+      return next(createError(500, "Server error!"));
     }
   });
   };
 
   module.exports.uploadThumbnail = (req, res, next) => {
+    if (!req.session.user) return res.redirect("/login");
     const uploadArticleThumbnail = upload.articleTumbnailUpload.single("thumbnail");
   
     uploadArticleThumbnail(req, res, async (err) => {
