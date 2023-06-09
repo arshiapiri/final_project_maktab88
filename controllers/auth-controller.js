@@ -57,7 +57,7 @@ module.exports.login = async (req, res, next) => {
 
         let user = await Users.findOne({
             username: requestBody.username,
-        });
+        } , { fristName : 1 , lastName : 1 , username : 1 , password : 1})
 
         if (!user) {
             return next(new AppError(401, 'username not match'));
@@ -71,6 +71,7 @@ module.exports.login = async (req, res, next) => {
         req.session.user = { _id: user._id, role: user.roleIn };
         res.send({ user })
     } catch (error) {
+        console.log(error);
         next(new AppError(500, "LogIn failed. Please check your information and try again."));
     }
 }
