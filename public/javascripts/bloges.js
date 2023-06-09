@@ -79,7 +79,7 @@ $(() => {
     if (swalResult.isConfirmed) {
       const userData = swalResult.value;
 
-      const response = await fetch('/users/updateUser', {
+      const response = await fetch('api/users/updateUser', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

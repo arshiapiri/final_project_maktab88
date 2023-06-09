@@ -6,7 +6,7 @@ $(() => {
         password: $("#password-input").val(),
       }
   
-       await fetch("/users/login", {
+       await fetch("/api/users/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(fields)

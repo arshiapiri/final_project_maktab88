@@ -10,7 +10,7 @@ $(() => {
     }
     if (!!$("#gender-input").val()) fields.gender = $("#gender-input").val();
 
-     await fetch("/users/signup", {
+     await fetch("/api/users/signup", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(fields)

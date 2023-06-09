@@ -1,6 +1,6 @@
 $(() => {
     $("#logout-btn").on("click", async function (e) {
-        await fetch("/users/logout", {
+        await fetch("api/users/logout", {
             method: "get"
         })
             .then(async response => {
@@ -23,7 +23,7 @@ $(() => {
     })
 
     $("#delete-btn").on("click", async function (e) {
-        await fetch("users/deleteAcc", {
+        await fetch("api/users/deleteAcc", {
             method: "get"
         }).then(response => {
             Swal.fire({
