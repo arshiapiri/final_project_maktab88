@@ -1,14 +1,15 @@
 $(() => {
   const cardsContainer = $("#cardsContainer");
-
+  const url = window.location.pathname;
+  const articleId = url.substring(url.lastIndexOf("/") + 1);
   let articles;
+
   const requestHandler = async () => {
-    await fetch("/article/getAll", {
+    await fetch("api/article/getAll", {
       method: "get"
     }).then(async response => {
       if (response.ok) {
-        const data = await response.json();
-        console.log(data);
+       const data = await response.json();
         articles = data.readArticle;
         cardsRenderer(articles);
       }
@@ -39,7 +40,7 @@ $(() => {
         <p class="card-text">
           <p>CreatedAt: ${formatDate(article.createdAt)}</p>
         </p>
-          <a href="/article/${article._id}" class="btn btn-primary w-100">Show Profile</a>
+          <a href="api/article/${article._id}" class="btn btn-primary w-100">Show Profile</a>
         </div>
       </div>
     </div>
@@ -57,52 +58,51 @@ $(() => {
   $("#editArticleBtn").on("click", async function (e) {
     e.preventDefault();
     let hasErrors = false;
-
+  
     const swalResult = await Swal.fire({
-      title: 'Input user information',
+      title: 'Input article information',
       html:
-        '<input id="swal-input1" class="swal2-input" placeholder="title">' +
-        '<input type="file" id="swal-input3" class="swal2-input" placeholder="Thumbnail" style="width: 260px;">' +
-        '<input id="swal-input5" class="swal2-input" placeholder="Content">',
+        '<input type="text" class="form-control form-control-lg" id="title" name="title" placeholder="Enter your title" />' +
+        '<input type="file" name="thumbnail" class="form-control form-control-lg" id="thumbnail" placeholder="Enter your thumbnail" />' +
+        ' <textarea class="form-control form-control-lg" id="content" name="content" placeholder="Enter your content"></textarea>',
       showCancelButton: true,
       confirmButtonText: 'Submit',
       cancelButtonText: 'Cancel',
       preConfirm: () => {
-        return {
-          title: document.getElementById('swal-input1').value,
-          Thumbnail: document.getElementById('swal-input3').value,
-          Content: document.getElementById('swal-input4').value,
-        };
+        const formData = new FormData();
+        formData.append('title', document.getElementById('title').value);
+        formData.append('content', document.getElementById('content').value);
+        formData.append('thumbnail', document.getElementById('thumbnail').files[0]);
+  
+        return formData;
       }
     });
-
+  
     if (swalResult.isConfirmed) {
-      const userData = swalResult.value;
-
-      const response = await fetch('api/users/updateUser', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(userData)
+      const articleData = swalResult.value;
+  
+      const response = await fetch(`/api/article/${articleId}`, {
+        method: 'put',
+        body: articleData
       });
-
+  
       if (!response.ok) {
         const errorMessage = await response.text();
         const parsedError = JSON.parse(errorMessage);
         const errorText = parsedError.message;
-
+  
         Swal.fire({
           icon: 'error',
           title: 'Error',
           text: errorText
         });
-
+  
         hasErrors = true;
       }
-
+  
       if (!hasErrors) {
         Swal.close();
+        window.location.href = `/Article`;
       }
     }
   });
