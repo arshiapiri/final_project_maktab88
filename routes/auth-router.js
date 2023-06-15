@@ -13,7 +13,7 @@ router.post("/login", loginController.login);
 router.post("/updateUser",checkSessionValidity.protect, updateController.updateUser);
 router.get("/logout",checkSessionValidity.protect, logoutController.logOut);
 
-router.get("/deleteAcc" , deleteController.deleteUser)
+router.get("/deleteAcc" ,checkSessionValidity.protect, deleteController.deleteUser)
 
 
 
