@@ -57,7 +57,7 @@ module.exports.login = async (req, res, next) => {
 
         let user = await Users.findOne({
             username: requestBody.username,
-        } , { fristName : 1 , lastName : 1 , username : 1 , password : 1})
+        }, { fristName: 1, lastName: 1, username: 1, password: 1 })
 
         if (!user) {
             return next(new AppError(401, 'username not match'));
@@ -104,7 +104,7 @@ module.exports.updateUser = async (req, res, next) => {
         }
 
         req.session.user = { _id: user._id };
-    console.log(req.session.user);
+        console.log(req.session.user);
         const updating = await Users.findByIdAndUpdate(
             req.session.user._id,
             fields,
