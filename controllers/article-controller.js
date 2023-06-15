@@ -2,6 +2,7 @@ const Articles = require("../models/Article");
 const AppError = require('../utils/app-error');
 const { join } = require('node:path');
 const ArticleForCreate = require("../validators/checkForCreateArticle");
+const ArticleForUpdate = require("../validators/checkForUpdateArticle");
 
 // const resizeArticleThumbnail = require('../utils/resizeImage/resizeArticleThumbnail');
 // const resizeArticleImages = require('../utils/resizeImage/resizeArticleImage');
@@ -9,17 +10,20 @@ const ArticleForCreate = require("../validators/checkForCreateArticle");
 
 module.exports.getAll = async (req, res, next) => {
   try {
+    if (!req.session.user) return res.redirect("/login");
     const readArticle = await Articles.find({})
 
 
     res.send({ readArticle })
   } catch (error) {
+    console.log(error);
     next(new AppError(500, "something went wrong, not fault :)"));
   }
 }
 
 module.exports.getId = async (req, res, next) => {
   try {
+    if (!req.session.user) return res.redirect("/login");
     const readArticleById = await Articles.findById(req.params.articleId);
 
     res.render(join(__dirname, '../views/oneBlog.ejs'), { article: readArticleById });
@@ -31,29 +35,73 @@ module.exports.getId = async (req, res, next) => {
 
 module.exports.updateArticle = async (req, res, next) => {
   try {
+    if (!req.session.user) return res.redirect("/login");
     const ress = await Articles.findById(req.params.articleId);
-    console.log(ress);
-   
+    let thumbnailPath = ress.thumbnail; // Initialize the thumbnail path with the existing thumbnail
+
+    // Check if a new thumbnail is provided in the request
+    if (req.file && req.file.filename) {
+      thumbnailPath = "/images/articles/thumbnailPic/" + req.file.filename;
+    }
+
+    const articleBody = {
+      title: req.body.title,
+      content: req.body.content,
+      thumbnail: thumbnailPath,
+    };
+
+    const { error } = ArticleForUpdate.validateUser(articleBody)
+    console.log(error);
+
+    if (!!error) {
+        return next(
+            new AppError(
+                400,
+                error.details[0].message
+            )
+        )
+    }
+
+    const updateArticle = await Articles.findByIdAndUpdate(
+      req.params.articleId,
+      articleBody,
+      { new: true }
+    ).select("-__v");
+
+    res.status(200).send(updateArticle);
   } catch (error) {
     console.log(error);
+    next(new AppError(500, "An error occurred."));
   }
-}
+};
 
 module.exports.create = async (req, res, next) => {
   try {
+    if (!req.session.user) return res.redirect("/login");
     const newArticle = new Articles({
       title: req.body.title,
       content: req.body.content,
-       author: req.session.user._id,
+      author: req.session.user._id,
       thumbnail: "/images/articles/thumbnailPic/" + req.file.filename,
     });
 
+    const { error } = ArticleForCreate.validateUser(newArticle)
+
+    // if (!!error) {
+    //     return next(
+    //         new AppError(
+    //             400,
+    //             error.details[0].message
+    //         )
+    //     )
+    // }
+
     if (!req.session.user) return res.redirect("/login");
     // const articleImages = await resizeArticleImages.resizeArticleImages(article._id, req.file);
-  
-     await newArticle.save();
-     res.redirect("/Article");
-  
+
+    await newArticle.save();
+    res.redirect("/Article");
+
   } catch (error) {
     console.log(error);
     next(new AppError(500, "something went wrong, your article not create :)"));
@@ -62,6 +110,7 @@ module.exports.create = async (req, res, next) => {
 
 module.exports.delete = async (req, res, next) => {
   try {
+    if (!req.session.user) return res.redirect("/login");
     await Articles.findByIdAndDelete(req.params.articleId)
     res.redirect('/article')
   } catch (error) {
