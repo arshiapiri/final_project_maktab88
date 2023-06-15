@@ -13,11 +13,11 @@ const validationForCreate = Joi.object({
         "string.min": "Sketch must have at least {#limit} characters",
         "string.max": "Sketch can have at most {#limit} characters",
       }),
-      // thumbnailFileName: Joi.string().required().messages({
-      //   "string.base": "Thumbnail file name must be a string",
-      //   "string.empty": "Thumbnail file name is required",
-      //   "any.required": "Thumbnail file name is required",
-      // }),
+      thumbnail: Joi.string().required().messages({
+        "string.base": "Thumbnail file name must be a string",
+        "string.empty": "Thumbnail file name is required",
+        "any.required": "Thumbnail file name is required",
+      }),
       content: Joi.string().min(3).required().messages({
         "string.base": "Content must be a string",
         "string.empty": "Content is required",

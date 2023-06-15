@@ -62,27 +62,25 @@
                     class="img-fluid" alt="Sample image">
             </div>
             <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
-                <form>
-                    <!-- title input -->
-                    <div class="form-outline mb-3">
-                        <input type="text" id="title-input" class="form-control form-control-lg"
-                            placeholder="Enter your title" />
-                    </div>
-                    <!--  input content-->
-                    <div class="form-outline mb-3">
-                        <input type="text" id="content-input" class="form-control form-control-lg"
-                            placeholder="Enter your content" />
-                    </div>
-                    <!-- thumbnail input -->
-                    <div class="form-outline mb-3">
-                      <input type="file" id="thumbnail-input" class="form-control form-control-lg" placeholder="Thumbnail">
-                  </div>
-                    <div class="text-center text-lg-start mt-4 pt-2">
-                        <button type="button" class="btn btn-primary btn-lg"
-                            style="padding-left: 2.5rem; padding-right: 2.5rem;">createNewArticle</button>
-                    </div>
-
-                </form>
+              <form action="api/article/create" method="post" enctype="multipart/form-data">
+                <div class="form-outline mb-3">
+                  <input type="text" class="form-control form-control-lg" id="title" name="title"  
+                  placeholder="Enter your title" />
+                </div>
+                <div class="form-outline mb-3">
+                  <input type="file" name="thumbnail" class="form-control form-control-lg" id="thumbnail" 
+                  placeholder="Enter your thumbnail" />
+                </div>
+                <div class="form-outline mb-3">
+                  <textarea class="form-control form-control-lg" id="content" name="content" placeholder="Enter your content"></textarea>
+                </div>
+                <div class="text-center text-lg-start mt-4 pt-2">
+                  <button type="submit" class="btn btn-primary btn-lg" id="save-article-button" 
+                  style="padding-left: 2.5rem; padding-right: 2.5rem;">
+                    Save changes
+                  </button>
+                </div>
+              </form>
             </div>
         </div>
     </div>
