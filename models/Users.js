@@ -101,10 +101,10 @@ UsersSchema.virtual("comments", {
   foreignField: "author",
 });
 
-// UsersSchema.pre(/^find/ ,  function (next) {
-//   this.populate("comments" , { commentForArticle : 1}).populate("articles" , {title : 1})
-//    next()
-// })
+UsersSchema.pre(/^find/ ,  function (next) {
+  this.populate("comments" , { commentForArticle : 1}).populate("articles" , {title : 1})
+   next()
+})
 
 UsersSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();

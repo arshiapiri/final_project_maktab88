@@ -31,4 +31,9 @@ const ArticlesSchema = new Schema({
     { timestamps: true }
 )
 
+ArticlesSchema.pre(/^find/ ,  function (next) {
+  this.populate("comments" , { commentForArticle : 1})
+   next()
+})
+
 module.exports = model("Articles", ArticlesSchema);

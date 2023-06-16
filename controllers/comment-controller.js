@@ -32,7 +32,7 @@ module.exports.createComment = async (req, res, next) => {
     const commentBody = {
       commentForArticle = null, articleId = null,
     } = req.body;
-
+console.log(commentBody);
     const { error } = createCommentValidation.validateUser(commentBody)
 
     if (!!error) {
@@ -71,6 +71,7 @@ module.exports.createComment = async (req, res, next) => {
 
     res.status(201).send(createComment);
   } catch (error) {
+    console.log(error);
     next(new AppError(500, "An error occurred while creating the comment."));
   }
 }

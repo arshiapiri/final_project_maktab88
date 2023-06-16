@@ -3,7 +3,8 @@ const router = express.Router();
 const controllers = require("../controllers/comment-controller.js")
 
 const checkSessionValidity = require("../middlewares/auth/checkSessionValidity.js");
-const getCommentCheck = require("../middlewares/comment/getCommentCheck.js")
+const getCommentCheck = require("../middlewares/comment/getCommentCheck.js");
+const isOwnerOf = require("../middlewares/comment/isOwnerOfComment.js")
 
 
 router.get("/my-comments",
@@ -20,12 +21,14 @@ router.post("/", checkSessionValidity.protect,
 router.put("/:commentId",
     checkSessionValidity.protect,
     getCommentCheck.commentExistance,
-    controllers.updateComment
+    controllers.updateComment,
+    isOwnerOf.Comment
 );
 router.delete("/:commentId",
     checkSessionValidity.protect,
     getCommentCheck.commentExistance,
-    controllers.deleteComment
+    controllers.deleteComment,
+    isOwnerOf.Comment
 );
 
 

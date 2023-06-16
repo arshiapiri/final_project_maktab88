@@ -24,6 +24,26 @@ module.exports.getAll = async (req, res, next) => {
   }
 };
 
+
+module.exports.getAllMyArticle = async (req, res, next) => {
+  try {
+    if (!req.session.user) return res.redirect("/login");
+
+    const query = Articles.find({
+      author: req.session.user._id,
+    });
+
+    const articles = await query;
+
+    const articlesJSON = articles.map(article => article.toObject());
+
+    res.status(200).json(articlesJSON);
+  } catch (error) {
+    console.log(error);
+    next(new AppError(500, "Something went wrong, not your fault :)"));
+  }
+};
+
 module.exports.getId = async (req, res, next) => {
   try {
     if (!req.session.user) return res.redirect("/login");
