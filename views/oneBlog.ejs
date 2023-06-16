@@ -1,88 +1,137 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>my bloges</title>
-        <!-- Add the link to the Bootstrap CSS file -->
-        <link rel="stylesheet" href="/stylesheets/createArticle.css">
-        <link rel="stylesheet" href="/stylesheets/styleCardArticle.css">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
-        <link rel="stylesheet" href="https://unpkg.com/polipop/dist/css/polipop.core.min.css" />
-        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-</head>
-<body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="http://localhost:3000/profile"><i class="fa fa-user" aria-hidden="true"></i></a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
 
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="http://localhost:3000/Article" id="getArticle">Explore <span
-                        class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="">Comments</a>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Dropdown
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="#">Action</a>
-                        <a class="dropdown-item" href="#">Another action</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">Something else here</a>
-                    </div>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="logout-btn" href="">LogOut</a>
-                </li>
-            </ul>
-            <div class="text-center">
-                <a href="http://localhost:3000/createArticle" class="btn btn-outline-danger btn-lg" id="createNewArticle">
-                  New Post
-                </a>
-              </div>
-        </div>
-    </nav>
-    <div class="col-12 mt-5">
-      <div class="row justify-content-center">
-        <div class="card shadow p-3">
-          <img src="<%= article.thumbnail %>" class="card-img-top rounded" />
-          <div class="card-body px-0">
-            <h5 class="card-title"><%= article.title %></h5>
-            <p class="card-text">
-              <p>Content: <%= article.content %></p>
-              <p>Author: <%= article.author %></p>
-              <p>CreatedAt: <%= article.createdAt %></p>
-            </p>
-            <div class="d-flex">
-              <a href="/api/article/delete/<%= article._id %>" type="button" class="btn btn-danger" id="removeArticleBtn">
-                  Remove
-              </a>
-              <button type="button" class="btn btn-warning" id="editArticleBtn">
-                  Edit
-              </button>
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>my bloges</title>
+  <!-- Add the link to the Bootstrap CSS file -->
+  <link rel="stylesheet" href="/stylesheets/createArticle.css">
+  <link rel="stylesheet" href="/stylesheets/styleCardArticle.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+  <link rel="stylesheet" href="https://unpkg.com/polipop/dist/css/polipop.core.min.css" />
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="http://localhost:3000/profile"><i class="fa fa-user" aria-hidden="true"></i></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="http://localhost:3000/Article" id="getArticle">Explore <span
+              class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="">Comments</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+            Dropdown
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="#">Action</a>
+            <a class="dropdown-item" href="#">Another action</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="#">Something else here</a>
+          </div>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="logout-btn" href="">LogOut</a>
+        </li>
+      </ul>
+      <div class="text-center">
+        <a href="http://localhost:3000/createArticle" class="btn btn-outline-danger btn-lg" id="createNewArticle">
+          New Post
+        </a>
+      </div>
+    </div>
+  </nav>
+
+
+  <div class="app">
+    <header>
+      <a href="">
+        <img src="<%= article.thumbnail %>" class="card-img-top rounded" />
+      </a>
+    </header>
+    <main>
+      <h1><span>Title:</span> <br>
+        <%= article.title %>
+      </h1>
+      <h5>Content: <%= article.content %></h5>
+      <h5>Author: <%= article.author %></h5>
+      <h5>CreatedAt: <%= article.createdAt %></h5>
+      <div class="d-flex">
+        <a href="/api/article/delete/<%= article._id %>" type="button" class="btn btn-danger" id="removeArticleBtn">
+          Remove
+        </a>
+        <button type="button" class="btn btn-warning" id="editArticleBtn">
+          Edit
+        </button>
+      </div>
+    </main>
+  </div>
+  
+  <!-- comment section -->
+
+  <section class="comment-section">
+    <div class="row d-flex justify-content-center">
+      <div class="col-md-8 col-lg-">
+        <div class="card shadow-0 border" style="background-color: #f0f2f5;">
+          <div class="card-body p-4" style="overflow: auto; height: 300px;">
+            <div class="form-outline mb-4">
+              <input type="text" id="addANote" class="form-control" placeholder="Type comment..." />
             </div>
+              <button type="submit" class="btn btn-primary btn-lg" id="save-comment-button" 
+              style="padding-left: 2.5rem; padding-right: 2.5rem;">
+                Save Comment
+              </button>
+  
+            <div class="card mb-4">
+              <div class="card-body">
+                <p>Type your note, and hit enter to add it</p>
+  
+                <div class="d-flex justify-content-between">
+                  <div class="d-flex flex-row align-items-center">
+                    <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(4).webp" alt="avatar" width="25"
+                      height="25" />
+                    <p class="small mb-0 ms-2">Martha</p>
+                  </div>
+                  <div class="d-flex flex-row align-items-center">
+                    <p class="small text-muted mb-0">Upvote?</p>
+                    <i class="far fa-thumbs-up mx-2 fa-xs text-black" style="margin-top: -0.16rem;"></i>
+                    <p class="small text-muted mb-0">3</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+  
+            
+  
           </div>
         </div>
       </div>
     </div>
-    
-      <!-- Add the link to the Bootstrap JS file -->
+  </section>
+
+
+
+  <!-- Add the link to the Bootstrap JS file -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <script src="/javascripts/bloges.js"></script>
+  <script src="/javascripts/oneArticle.js"></script>
 </body>
+
 </html>

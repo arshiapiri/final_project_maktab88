@@ -3,6 +3,7 @@ const AppError = require('../utils/app-error');
 const { join } = require('node:path');
 const ArticleForCreate = require("../validators/checkForCreateArticle");
 const ArticleForUpdate = require("../validators/checkForUpdateArticle");
+const paginate = require("../utils/pagination")
 
 // const resizeArticleThumbnail = require('../utils/resizeImage/resizeArticleThumbnail');
 // const resizeArticleImages = require('../utils/resizeImage/resizeArticleImage');
@@ -11,15 +12,17 @@ const ArticleForUpdate = require("../validators/checkForUpdateArticle");
 module.exports.getAll = async (req, res, next) => {
   try {
     if (!req.session.user) return res.redirect("/login");
-    const readArticle = await Articles.find({})
 
+    let { page, pageSize } = req.query;
 
-    res.send({ readArticle })
+    const paginatedResults = await paginate(Articles, page, pageSize);
+
+    res.status(200).json(paginatedResults);
   } catch (error) {
     console.log(error);
-    next(new AppError(500, "something went wrong, not fault :)"));
+    next(new AppError(500, "something went wrong, not fault :)" ));
   }
-}
+};
 
 module.exports.getId = async (req, res, next) => {
   try {

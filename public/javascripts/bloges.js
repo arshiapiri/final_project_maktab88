@@ -1,28 +1,38 @@
 $(() => {
   const cardsContainer = $("#cardsContainer");
+  const paginationContent = $("#paginationContent");
   const url = window.location.pathname;
   const articleId = url.substring(url.lastIndexOf("/") + 1);
-  let articles;
+  
 
   const requestHandler = async () => {
-    await fetch("api/article/getAll", {
-      method: "get"
-    }).then(async response => {
+    const page = 1;
+    const pageSize = 4;
+    const url = `api/article/getAll?page=${page}&pageSize=${pageSize}`;
+  
+    try {
+      const response = await fetch(url, {
+        method: "GET",
+      });
       if (response.ok) {
-       const data = await response.json();
-        articles = data.readArticle;
+        const data = await response.json();
+        console.log(data);
+        const articles = data.results;
         cardsRenderer(articles);
+        console.log(articles);
+      } else {
+        throw new Error("Network response was not ok");
       }
-    }).catch((error) => {
+    } catch (error) {
       console.log(error);
       Swal.fire({
-        title: "خطا!",
-        text: "مشکلی پیش آمده است!!!",
+        title: "error!",
+        text: "error !!",
         icon: "error",
       });
-    });
+    }
   }
-  requestHandler();
+  requestHandler()
   $("#getArticle").on("click", async function (e) {
     requestHandler()
   });
@@ -33,7 +43,7 @@ $(() => {
 
   const cardGenerator = (article) => {
     return `
-    <div class="col-md-4 col-sm-6 col-12">
+    <div class="col-md-6 col-sm-6 col-12">
         <img src="${article.thumbnail}" class="card-img-top rounded" />
       <div class="card-body px-0">
         <h5 class="card-title">Title: ${article.title}</h5>
@@ -55,57 +65,64 @@ $(() => {
     }
     cardsContainer.html(html);
   };
-  $("#editArticleBtn").on("click", async function (e) {
-    e.preventDefault();
-    let hasErrors = false;
+
+  const paginationHandler = async (page) => {
+    const pageSize = 4; 
+    const url = `/api/article/getAll?page=${page}&pageSize=${pageSize}`;
   
-    const swalResult = await Swal.fire({
-      title: 'Input article information',
-      html:
-        '<input type="text" class="form-control form-control-lg" id="title" name="title" placeholder="Enter your title" />' +
-        '<input type="file" name="thumbnail" class="form-control form-control-lg" id="thumbnail" placeholder="Enter your thumbnail" />' +
-        ' <textarea class="form-control form-control-lg" id="content" name="content" placeholder="Enter your content"></textarea>',
-      showCancelButton: true,
-      confirmButtonText: 'Submit',
-      cancelButtonText: 'Cancel',
-      preConfirm: () => {
-        const formData = new FormData();
-        formData.append('title', document.getElementById('title').value);
-        formData.append('content', document.getElementById('content').value);
-        formData.append('thumbnail', document.getElementById('thumbnail').files[0]);
-  
-        return formData;
-      }
-    });
-  
-    if (swalResult.isConfirmed) {
-      const articleData = swalResult.value;
-  
-      const response = await fetch(`/api/article/${articleId}`, {
-        method: 'put',
-        body: articleData
+    try {
+      const response = await fetch(url, {
+        method: "GET",
       });
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data);
+        const articles = data.results;
+        cardsRenderer(articles);
+        console.log(data);
   
-      if (!response.ok) {
-        const errorMessage = await response.text();
-        const parsedError = JSON.parse(errorMessage);
-        const errorText = parsedError.message;
+        // بررسی فعال یا غیرفعال بودن دکمه‌ها
+        const previousButton = document.getElementById("previous-button");
+        const nextButton = document.getElementById("next-button");
   
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: errorText
-        });
+        if (data.page === 1) {
+          previousButton.disabled = true;
+        } else {
+          previousButton.disabled = false;
+        }
   
-        hasErrors = true;
+        if (data.page === data.totalPages) {
+          nextButton.disabled = true;
+        } else {
+          nextButton.disabled = false;
+        }
+      } else {
+        throw new Error("Network response was not ok");
       }
-  
-      if (!hasErrors) {
-        Swal.close();
-        window.location.href = `/Article`;
-      }
+    } catch (error) {
+      console.log(error);
+      Swal.fire({
+        title: "خطا!",
+        text: "خطایی رخ داده است!",
+        icon: "error",
+      });
     }
+  };
+  
+  let currentPage = 1;
+  
+  document.getElementById("previous-button").addEventListener("click", () => {
+    currentPage--;
+    paginationHandler(currentPage);
   });
+  
+  document.getElementById("next-button").addEventListener("click", () => {
+    currentPage++;
+    paginationHandler(currentPage);
+  });
+  
+  // اجرای درخواست اولیه
+  paginationHandler(currentPage);
 });
 
 
